@@ -30,6 +30,26 @@ resource "google_storage_bucket_iam_member" "server" {
   role   = "roles/storage.admin"
 }
 
+resource "google_storage_bucket" "frontend_assets" {
+  name          = var.random_suffix ? "frontend-${var.project_id}-${random_id.suffix.hex}" : "frontend-${var.project_id}"
+  location      = var.region
+  storage_class = "REGIONAL"
+  force_destroy = true
+
+  website {
+    main_page_suffix = "index.html"
+    not_found_page   = "index.html" # Or a specific 404 page if you have one
+  }
+
+  labels = var.labels
+}
+
+resource "google_storage_bucket_iam_member" "frontend_public_access" {
+  bucket = google_storage_bucket.frontend_assets.name
+  role   = "roles/storage.objectViewer"
+  member = "allUsers"
+}
+
 resource "google_storage_bucket_iam_member" "automation" {
   bucket = google_storage_bucket.media.name
   member = "serviceAccount:${google_service_account.automation.email}"

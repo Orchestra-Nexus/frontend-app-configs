@@ -24,6 +24,11 @@ output "firebase_url" {
   value       = local.firebase_url
 }
 
+output "frontend_bucket_name" {
+  description = "Name of the Cloud Storage bucket for frontend assets"
+  value       = google_storage_bucket.frontend_assets.name
+}
+
 locals {
   toggleCommerceActive = length(split("serverless-ecommerce", var.client_image_host)) > 1
   neosUrlTemplate      = "https://console.cloud.google.com/products/solutions/deployments?walkthrough_id=panels--sic--%s_toc"

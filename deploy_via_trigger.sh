@@ -103,3 +103,15 @@ fi
 
 echo "Deploying the solution"
 gcloud infra-manager deployments apply projects/"${PROJECT_ID}"/locations/"${REGION}"/deployments/"${DEPLOYMENT_NAME}" --service-account "${SERVICE_ACCOUNT}" --local-source="infra" --inputs-file="input.tfvars" --labels="modification-reason=make-it-mine,goog-solutions-console-deployment-name=${DEPLOYMENT_NAME},goog-solutions-console-solution-id=${SOLUTION_ID},goog-config-partner=sc"
+
+echo "Retrieving frontend bucket name from deployment outputs"
+FRONTEND_BUCKET_NAME=$(gcloud infra-manager deployments describe "${DEPLOYMENT_NAME}" --location "${REGION}" --format='value(terraformOutput.frontend_bucket_name.value)')
+
+if [ -z "$FRONTEND_BUCKET_NAME" ]; then
+	echo "Failed to retrieve frontend bucket name, exiting now!"
+	exit 1
+fi
+echo "Frontend bucket name is ${FRONTEND_BUCKET_NAME}"
+
+echo "Triggering frontend Cloud Build"
+gcloud builds submit . --project="${PROJECT_ID}" --config="frontend-app-configs/cloudbuild_frontend.yaml" --substitutions=_FRONTEND_BUCKET_NAME="gs://${FRONTEND_BUCKET_NAME}"
