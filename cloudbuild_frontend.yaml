@@ -1,9 +1,0 @@
-steps:
-  - name: 'gcr.io/cloud-builders/npm'
-    args: ['install']
-    dir: 'orchestration-nexus-ui'
-  - name: 'gcr.io/cloud-builders/npm'
-    args: ['run', 'build']
-    dir: 'orchestration-nexus-ui'
-  - name: 'gcr.io/cloud-builders/gsutil'
-    args: ['rsync', '-r', 'orchestration-nexus-ui/dist', 'gs://your-frontend-bucket-name']

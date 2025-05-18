@@ -37,18 +37,39 @@ module "dynamic-python-webapp" {
 ```
 
 Functional examples are included in the
-[examples](./infra/examples/) directory.
+[examples](./examples/) directory.
 
 <!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 ## Inputs
 
-No input.
+| Name | Description | Type | Default | Required |
+|------|-------------|------|---------|:--------:|
+| client\_image\_host | Artifact Registry that hosts the client image (PROJECT\_ID/registry) | `string` | `"hsa-public/containers/terraform-python-dynamic-webapp"` | no |
+| database\_name | Cloud SQL database name | `string` | `"django"` | no |
+| database\_username | Cloud SQL database name | `string` | `"server"` | no |
+| enable\_apis | Whether or not to enable underlying apis in this solution. | `bool` | `true` | no |
+| image\_version | Version of the container image to use | `string` | `"v1.13.4"` | no |
+| init | Initialize database? | `bool` | `true` | no |
+| instance\_name | Cloud SQL Instance name | `string` | `"psql"` | no |
+| labels | A set of key/value label pairs to assign to the resources deployed by this blueprint. | `map(string)` | `{}` | no |
+| project\_id | Google Cloud Project ID | `string` | n/a | yes |
+| random\_suffix | Add random suffix to VM name | `string` | `true` | no |
+| region | Google Cloud Region | `string` | `"us-central1"` | no |
+| server\_image\_host | Artifact Registry that hosts the server image (PROJECT\_ID/registry) | `string` | `"hsa-public/containers/terraform-python-dynamic-webapp"` | no |
+| service\_name | Cloud Run service name | `string` | `"server"` | no |
+| zone | GCP zone for provisioning zonal resources. | `string` | `"us-central1-c"` | no |
 
 ## Outputs
 
 | Name | Description |
 |------|-------------|
+| client\_job\_name | Name of the Cloud Run Job, deploying the front end |
+| django\_admin\_password | Django Admin password |
+| django\_admin\_url | Django Admin URL |
 | firebase\_url | Firebase URL |
+| neos\_toc\_url | Neos Tutorial URL |
+| server\_service\_name | Name of the Cloud Run service, hosting the server API |
+| usage | Next steps for usage |
 
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 
@@ -110,7 +131,7 @@ provision a project with the necessary APIs enabled.
 
 ## Contributing
 
-Refer to the [contribution guidelines](CONTRIBUTING.md) for
+Refer to the [contribution guidelines](../CONTRIBUTING.md) for
 information on contributing to this module.
 
 [iam-module]: https://registry.terraform.io/modules/terraform-google-modules/iam/google
@@ -120,4 +141,4 @@ information on contributing to this module.
 
 ## Security Disclosures
 
-Please see our [security disclosure process](SECURITY.md).
+Please see our [security disclosure process](../SECURITY.md).
